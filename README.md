@@ -9,5 +9,5 @@ A lightweight IP management tool
 </ul>
 <h3>Tutorial</h3>
 Put the ipcheck package in your APP'root directory, and then,<br />
-Just require the file name 'index.php' in the entrance of your APP.<br />
+Just require the file name 'index.php' to the entrance of your APP.<br />
 At last, You could access http://yourhostname/ipcheck/ipadmin/admin.php to manage IPs.
