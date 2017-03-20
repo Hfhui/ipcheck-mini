@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="main.css" />
+	<title>IpCheck Admin</title>
+</head>
+<body>
+	<div class="head">
+		<h2>IpCheck Admin</h2>
+	</div>
+
+	<div class="body">
+		<div class="body_left">
+			<ul class="menu">
+				<li <?php if($request_parameter['menu']=='recent_record') echo 'class="menu_select"' ?>>
+					<a href="admin.php?menu=recent_record">Recent Record</a>
+				</li>
+				<li <?php if($request_parameter['menu']=='total_record') echo 'class="menu_select"' ?>>
+					<a href="admin.php?menu=total_record">Total Record</a>
+				</li>
+				<li <?php if($request_parameter['menu']=='ban_record') echo 'class="menu_select"' ?>>
+					<a href="admin.php?menu=ban_record">Ban Record</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="body_right">
+			<?php echo $html_body; ?>
+		</div>
+	</div>
+
+	<div class="foot">
+		<span>©2017 <a href="#">IpCheck</a> huangfuhui@outlook.com</span>
+	</div>
+</body>
