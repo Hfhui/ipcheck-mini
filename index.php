@@ -11,10 +11,10 @@ $current_time = time();
 // set the last access time
 $last_time = 0;
 
-// connect the Redis Server
-$redis = new Redis();
-$res = $redis->connect('127.0.0.1', '6379');
-$res || exit;
+// get Redis connection
+require dirname(__FILE__) . '/ipadmin/RedisSingle.php';
+$redis = RedisSingle::getRedis();
+$redis || exit;
 
 /**
  * insert or update the info of access IP
@@ -30,9 +30,7 @@ $ip_info = [
 $redis->hSet('ips:info', $ip, json_encode($ip_info));
 $redis->lPush('ips:access_record', $ip);
 $redis->lTrim('ips:access_record', 0, 149);
-$access_times = $redis->zScore('ips:access_times', $ip);
-empty($access_times) && $access_times = 0;
-$redis->zAdd('ips:access_times', ++$access_times, $ip);
+$redis->zIncrBy('ips:access_times', 1, $ip);
 
 /**
  * Determine whether banned IP,
@@ -54,12 +52,22 @@ if ($times > 10) {
     $last_time = $redis->lIndex($ip, -1);
 }
 $redis->lTrim($ip, 0, 9);
-
-// close the Redis's connection
-$redis->close();
+$redis->select(0);
 
 // take corresponding measures to access frequently IP
 if ($current_time - $last_time < 60) {
     require dirname(__FILE__) . '/wait.html';
+
+    // mark the invalid access
+    $redis->zIncrBy('ips:invalid_access', 1, date('y-m-d', time()));
+
+    // close Redis
+    RedisSingle::closeRedis();
     die;    // access denied
 }
+
+// make the effective access
+$redis->zIncrBy('ips:effective_access', 1, date('y-m-d', time()));
+
+// close Redis
+RedisSingle::closeRedis();

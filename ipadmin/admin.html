@@ -3,11 +3,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="main.css" />
+    <script src="echarts.min.js"></script>
 	<title>IpCheck Admin</title>
 </head>
 <body>
 	<div class="head">
 		<h2>IpCheck Admin</h2>
+		<span>Current IP: <?php echo $_SERVER['REMOTE_ADDR']; ?></span>
 	</div>
 
 	<div class="body">
@@ -18,6 +20,9 @@
 				</li>
 				<li <?php if($request_parameter['menu']=='total_record') echo 'class="menu_select"' ?>>
 					<a href="admin.php?menu=total_record">Total Record</a>
+				</li>
+				<li <?php if($request_parameter['menu']=='access_count') echo 'class="menu_select"' ?>>
+					<a href="admin.php?menu=access_count">Access Count</a>
 				</li>
 				<li <?php if($request_parameter['menu']=='ban_record') echo 'class="menu_select"' ?>>
 					<a href="admin.php?menu=ban_record">Ban Record</a>
@@ -31,6 +36,6 @@
 	</div>
 
 	<div class="foot">
-		<span>©2017 <a href="#">IpCheck</a> huangfuhui@outlook.com</span>
+		<span>©2017 <a href="https://github.com/Hfhui/ipcheck.git">IpCheck V0.2</a> huangfuhui@outlook.com</span>
 	</div>
 </body>

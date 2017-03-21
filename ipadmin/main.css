@@ -7,7 +7,16 @@
 
 .head {
     margin: 30px 100px;
+}
+ 
+.head h2 {
     text-align: center;
+}
+
+.head span {
+    float: right;
+    color: gray;
+    margin-right: 150px;
 }
 
 .body {
@@ -167,11 +176,15 @@
     margin-top: 80px;
     width: 100%;
     text-align: center;
-    color: lightgray;
+    color: gray;
 }
 
 .foot a {
     text-decoration: none;
-    color: gray;
+    color: black;
+}
+
+.foot a:hover {
+    text-decoration: underline;
 }
 /* ----------------------Foot <end>------------------------ */

@@ -1,4 +1,5 @@
 <?php
+require dirname(__FILE__) . '/RedisSingle.php';
 require dirname(__FILE__) . '/AccessDenied.php';
 
 /*
@@ -11,10 +12,9 @@ class DataRender
 
     public function __construct()
     {
-        // connect the Redis Server
-        $this->redis = new Redis();
-        $res = $this->redis->connect('127.0.0.1', '6379');
-        $res || exit;
+        // get Redis connection
+        $this->redis = RedisSingle::getRedis();
+        $this->redis || exit;
 
         // set the default timezone
         date_default_timezone_set('Asia/Shanghai');
@@ -138,6 +138,70 @@ HTML;
     }
 
     /**
+     * Return the HTML code of the access count
+     * @return string
+     */
+    public function accessCount() {
+        /*
+         * get access records for seven days from now
+         */
+        for ($i = 0; $i < 7; $i++){
+            $date[$i] = date('y-m-d', time() - $i * 86400);
+            $res = $this->redis->zScore('ips:effective_access', $date[$i]);
+            $res ? $effective_access[$i] = $res : $effective_access[$i] = 0;
+            $res = $this->redis->zScore('ips:invalid_access', $date[$i]);
+            $res ? $invalid_access[$i] = $res : $invalid_access[$i] = 0;
+            $total_access[$i] = $effective_access[$i] + $invalid_access[$i];
+        }
+
+        $html_body = <<<HTML
+<div id="echarts" style="width: 700px;height: 400px;margin: 20px auto;">
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('echarts'));
+        var option = {
+            title: {
+                text: 'ACCESS COUNT'
+            },
+            tooltip: {},
+            legend: {
+                data:['Total access','Effective access','Invalid access']
+            },
+            xAxis: {
+                data: ['{$date[6]}','{$date[5]}','{$date[4]}','{$date[3]}','{$date[2]}','{$date[1]}','{$date[0]}']
+            },
+            yAxis: {},
+            series: [{
+                name: 'Total access',
+                type: 'bar',
+                data: [
+                    {$total_access[6]},{$total_access[5]},{$total_access[4]},{$total_access[3]},
+                    {$total_access[2]},{$total_access[1]},{$total_access[0]}
+                ]
+            },{
+                name: 'Effective access',
+                type: 'bar',
+                data: [
+                    {$effective_access[6]},{$effective_access[5]},{$effective_access[4]},{$effective_access[3]},
+                    {$effective_access[2]},{$effective_access[1]},{$effective_access[0]}
+                ]
+            },{
+                name: 'Invalid access',
+                type: 'bar',
+                data: [
+                    {$invalid_access[6]},{$invalid_access[5]},{$invalid_access[4]},{$invalid_access[3]},
+                    {$invalid_access[2]},{$invalid_access[1]},{$invalid_access[0]}
+                ]
+            }]
+        };
+        myChart.setOption(option);
+    </script>
+</div>
+HTML;
+
+        return $html_body;
+    }
+
+    /**
      * Return the HTML code of the ban record
      * @return string
      */
@@ -209,6 +273,7 @@ HTML;
 
     public function __destruct()
     {
-        $this->redis->close();
+        // close Redis
+        RedisSingle::closeRedis();
     }
 }

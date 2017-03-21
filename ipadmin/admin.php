@@ -8,7 +8,7 @@ if (empty($request_parameter['menu'])) {
 }
 
 /**
- * get the data output
+ * get the data as HTML
  */
 require dirname(__FILE__) . '/DataRender.php';
 $data_render = new DataRender();
@@ -20,6 +20,10 @@ switch ($request_parameter['menu']) {
         break;
     case 'total_record': {
         $html_body = $data_render->totalRecord($request_parameter['page']);
+    }
+        break;
+    case 'access_count': {
+        $html_body = $data_render->accessCount();
     }
         break;
     case 'ban_record': {
