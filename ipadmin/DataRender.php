@@ -1,6 +1,7 @@
 <?php
 require dirname(__FILE__) . '/RedisSingle.php';
 require dirname(__FILE__) . '/AccessDenied.php';
+require dirname(__FILE__) . '/Page.php';
 
 /*
  * Obtain and rendering data
@@ -72,7 +73,7 @@ HTML;
 </table>
 HTML;
 
-        return $html_body . $this->getPageSelector($page + 1, ceil($list_count / 15), 'admin.php?menu=recent_record');
+        return $html_body . $this->getPageSelector($list_count, 15, 'admin.php', ['menu'=>'recent_record']);
     }
 
     /**
@@ -134,7 +135,7 @@ HTML;
 </table>
 HTML;
 
-        return $html_body . $this->getPageSelector($page + 1, ceil($record_count / 15), 'admin.php?menu=total_record');
+        return $html_body . $this->getPageSelector($record_count, 15, 'admin.php', ['menu'=>'total_record']);
     }
 
     /**
@@ -236,39 +237,16 @@ HTML;
 
     /**
      * Rendering the output of Page-Selector
-     * @param $current_page
-     * @param $total_page
-     * @param $href
+     * @param $totalRecord
+     * @param $showRows
+     * @param $baseUrl
+     * @param $parameter
      * @return string
      */
-    public function getPageSelector($current_page, $total_page, $href)
+    public function getPageSelector($totalRecord, $showRows, $baseUrl, $parameter = array())
     {
-        $page_selector_html = <<<HTML
-<div class="page_selector">
-    <ul>
-HTML;
-
-        for ($i = 1; $i <= $total_page; $i++) {
-            if ($i == $current_page) {
-                $select_class = 'class="page_select"';
-            } else {
-                $select_class = '';
-            }
-
-            $next_href = $href . '&page=' . $i;
-
-            $page_selector_html .= <<<HTML
-        <li {$select_class}><a href="{$next_href}">$i</a></li>
-HTML;
-        }
-
-        $page_selector_html .= <<<HTML
-        <li><span>total {$total_page} pages</span></li>
-    </ul>
-</div>
-HTML;
-
-        return $page_selector_html;
+        $pageSelector = new Page($totalRecord, $showRows, $baseUrl, $parameter);
+        return $pageSelector->show();
     }
 
     public function __destruct()
