@@ -8,7 +8,7 @@
 .head {
     margin: 30px 100px;
 }
- 
+
 .head h2 {
     text-align: center;
 }
@@ -102,15 +102,35 @@
     text-align: center;
 }
 
-.page_selector ul {
-    list-style-type: none;
-}
-
-.page_selector li {
+.page_selector span {
+    font-weight: bold;
+    font-size: 10px;
     display: inline-block;
+    margin-right: 3px;
 }
 
-.body_right .page_selector a:link, a:visited {
+.current_page {
+    width: 20px;
+    padding: 4px;
+    margin-bottom: 5px;
+    color: white;
+    background-color: gray;
+}
+
+.more_page {
+    width: 20px;
+    color: lightgray;
+}
+
+.total_page {
+    width: 100px;
+    padding: 4px;
+    margin-left: 6px;
+    margin-bottom: 5px;
+    background-color: lightgray;
+}
+
+.page_selector a:link, a:visited {
     display: block;
     font-weight: bold;
     font-size: 10px;
@@ -123,24 +143,9 @@
     text-decoration: none;
 }
 
-.body_right .page_selector a:hover, a:active {
+.page_selector a:hover, a:active {
     background-color: black;
 }
-
-.body_right .page_selector span {
-    font-size: 13px;
-    font-weight: bold;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    background-color: lightgray;
-    width: 25px;
-    padding: 4px;
-    margin-bottom: 5px;
-}
-
-.body_right .page_select a {
-    background-color: gray;
-}
-
 /* ----------------------Page Selector <end>------------------------ */
 
 /* ----------------------Ban Record <start>------------------------ */
